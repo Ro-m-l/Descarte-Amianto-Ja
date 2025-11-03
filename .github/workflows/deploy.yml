@@ -42,7 +42,7 @@ jobs:
           source: "./*"
           target: "~/docker"
 
-      # Rodar docker compose no servidor remoto
+      # Rodar docker compose no servidor remoto (preservando volumes)
       - name: Rodar Docker Compose no servidor AWS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -51,8 +51,10 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           script: |
             cd ~/docker
-            # Limpa imagens, volumes e containers antigos para liberar espaço
-            docker system prune -f
+            # Limpa containers e imagens antigas, preservando volumes
+            docker system prune -f --volumes=false
+            # Para containers antigos do compose, sem remover volumes
             docker-compose down
+            # Rebuild e start
             docker-compose build
             docker-compose up -d
