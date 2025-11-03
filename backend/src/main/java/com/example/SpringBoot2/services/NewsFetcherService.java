@@ -31,7 +31,7 @@ public class NewsFetcherService {
         this.feedParser = feedParser;
         this.articleRepository = articleRepository;
         this.webScrapingService = webScrapingService;
-        this.RSS_URL = new String[] { "C:/Users/usefinal/Desktop/API/API/src/main/resources/4396369615713154359.xml",
+        this.RSS_URL = new String[] {
                 "https://www.google.com/alerts/feeds/13084519227054492460/4396369615713154359",
                 "https://www.google.com/alerts/feeds/13084519227054492460/2537531881959246548" };
     }

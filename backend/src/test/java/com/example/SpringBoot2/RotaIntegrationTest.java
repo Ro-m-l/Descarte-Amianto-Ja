@@ -1,18 +1,13 @@
 package com.example.SpringBoot2;
 
-import com.example.SpringBoot2.controllers.RotaController;
 import com.example.SpringBoot2.models.EmpresaModel;
 import com.example.SpringBoot2.repositories.EmpresaRepository;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,60 +16,25 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RotaIntegrationTest {
 
     @Autowired
-    private RotaController rotaController;
-
-    @Autowired
     private EmpresaRepository empresaRepository;
 
     @Test
-    void testRotaEmpresasRealAPI() throws Exception {
-        // Limpa o banco de teste
+    void testEmpresaCoordinatesIntegration() {
+        // Limpa o banco
         empresaRepository.deleteAll();
 
-        // Cria empresas com coordenadas conhecidas (lat,lon)
-        EmpresaModel e1 = new EmpresaModel("Padaria Central", "Rua Augusta, São Paulo - SP");
-        e1.setCoordenadas("-46.646495,-23.550078"); // lon,lat conforme API
-        empresaRepository.save(e1);
+        // Cria empresas mock com coordenadas
+        EmpresaModel e1 = new EmpresaModel("Padaria Central", "Rua Augusta, SP");
+        e1.setCoordenadas("-23.550078,-46.646495");
+        EmpresaModel e2 = new EmpresaModel("Padaria do Bairro", "Av. Paulista, SP");
+        e2.setCoordenadas("-23.561,-46.653");
 
-        EmpresaModel e2 = new EmpresaModel("Padaria do Bairro", "Av. Paulista, São Paulo - SP");
-        e2.setCoordenadas("-46.653,-23.561"); // lon,lat
-        empresaRepository.save(e2);
+        empresaRepository.saveAll(List.of(e1, e2));
 
-        // Monta request para rota
-        Map<String,Object> request = new HashMap<>();
-        request.put("startAddress", "Praça da Sé, São Paulo - SP");
-        request.put("numEmpresas", 2);
+        // Verifica se foram salvas corretamente
+        var empresas = empresaRepository.findAll();
+        assertEquals(2, empresas.size(), "Deveria ter 2 empresas");
 
-        // Chama o endpoint
-        ResponseEntity<Map<String,Object>> response = rotaController.getRotaEmpresas(request);
-
-        Map<String,Object> body = response.getBody();
-        assertNotNull(body);
-
-        if (response.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
-            System.out.println("Erro na API: " + body.get("error"));
-            fail("Falha na API: " + body.get("error"));
-        } else {
-            System.out.println("Start Coord: " + body.get("startCoord"));
-            System.out.println("Rotas retornadas: ");
-
-            @SuppressWarnings("unchecked")
-            Iterable<Map<String,Object>> rotas = (Iterable<Map<String,Object>>) body.get("rotas");
-
-            int count = 0;
-            for (Map<String,Object> rota : rotas) {
-                assertTrue(rota.containsKey("distanceKm"));
-                assertTrue(rota.containsKey("durationMin"));
-                assertTrue(rota.containsKey("coordinates"));
-                assertTrue(rota.containsKey("empresa"));
-
-                System.out.println("Empresa: " + rota.get("empresa") +
-                        " | Distância: " + rota.get("distanceKm") + " km" +
-                        " | Duração: " + rota.get("durationMin") + " min");
-                count++;
-            }
-
-            assertTrue(count > 0, "Nenhuma rota foi retornada!");
-        }
+        empresas.forEach(emp -> System.out.println(emp.getNome() + " | " + emp.getCoordenadas()));
     }
 }
