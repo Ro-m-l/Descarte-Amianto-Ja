@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class RotaIntegrationTest {
+public class RotaMockTest {
 
     @Autowired
     private EmpresaRepository empresaRepository;

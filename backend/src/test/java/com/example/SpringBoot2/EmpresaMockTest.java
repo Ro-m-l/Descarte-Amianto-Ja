@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class EmpresaIntegrationTest {
+public class EmpresaMockTest {
 
     @Autowired
     private EmpresaRepository empresaRepository;

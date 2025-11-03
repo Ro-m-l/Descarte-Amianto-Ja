@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class NewsIntegrationTest {
+public class NewsMockTest {
 
     @Autowired
     private ArticleRepository articleRepository;
