@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas de Descarte</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Container de cards */
+    .empresa-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px auto;
+      max-width: 1200px;
+    }
+
+    /* Cards de empresa */
+    .empresa-box {
+      background-color: #fff;
+      padding: 20px;
+      width: 300px;
+      border-radius: 12px;
+      text-align: center;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .empresa-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+
+    .empresa-box h3 {
+      margin: 10px 0;
+      font-size: 1.2em;
+      color: #333;
+    }
+
+    .empresa-box p {
+      font-size: 0.95em;
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .empresa-box a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .empresa-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Descarte Amianto Já</div>
+    <nav class="nav">
+      <a href="./mapa.html">Mapa</a>
+      <a href="./news.html">Noticias</a>
+      <a href="./empresas.html">Empresas</a>
+      <a href="./index.html">Home</a>
+    </nav>
+  </header>
+
+  <h1 class="title home-title" style="text-align:center; margin-top:20px;">Empresas de Descarte</h1>
+
+  <div class="empresa-container" id="empresaContainer">
+    <!-- Caixas das empresas serão geradas aqui -->
+
+  </div>
+  <div class="font-size-controls">
+    <button class="font-btn" data-size="small">A</button>
+    <button class="font-btn active" data-size="medium">A</button>
+    <button class="font-btn" data-size="large">A</button>
+  </div>
+  <button id="toggleButton" class="tts-button">🔊 Começar a ouvir</button>
+  <script src="scripts.js"></script>
+  <script>
+    async function fetchEmpresas() {
+      try {
+        const response = await fetch("/api/empresas");
+        if (!response.ok) throw new Error("Erro ao buscar empresas");
+        const empresas = await response.json();
+
+        const container = document.getElementById("empresaContainer");
+        container.innerHTML = ""; // limpa conteúdo anterior
+
+        empresas.forEach(empresa => {
+          const box = document.createElement("div");
+          box.className = "empresa-box";
+          box.innerHTML = `
+            <h3>${empresa.nome}</h3>
+            <p>${empresa.endereco}</p>
+            <p>Tel: ${empresa.telefone}</p>
+            ${empresa.email ? `<p>Email: ${empresa.email}</p>` : ''}
+            ${empresa.site ? `<p><a href="${empresa.site}" target="_blank">Site</a></p>` : ''}
+          `;
+          container.appendChild(box);
+        });
+
+      } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível carregar as empresas.");
+      }
+    }
+
+    fetchEmpresas();
+  </script>
+</body>
+</html>

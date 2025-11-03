@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meu_banco
+      MYSQL_USER: user
+      MYSQL_PASSWORD: senha
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/backup.sql:/docker-entrypoint-initdb.d/backup.sql
+
+  backend:
+    build: ./backend
+    container_name: spring_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/meu_banco
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: senha
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./frontend
+    container_name: nginx_frontend
+    ports:
+      - "8081:80" #era 80:80, melhor nao rodar no 80 no sistema local pois o sistema usa essa porta, usar só no EC2
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

@@ -1,0 +1,294 @@
+/* estrutura básica */
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.title {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-bottom: 50px;
+}
+.header {
+    position: relative;
+    background-color: #000000;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: #FFFFFF;
+}
+.header .logo {
+    font-size: 24px;
+}
+.header .nav {
+    padding-right: 50px;
+    display: flex;
+    gap: 20px;
+}
+.header .nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 16px;
+}
+.header .nav a:hover {
+    text-decoration: underline;
+}
+/* Caso ainda apareça algum traço, remover bordas */
+.post h2 a {
+  border: none !important;
+}
+/* guias */
+.headerAux {
+    background-color: rgb(182, 182, 182);
+    align-items: center;
+    gap: 50%;
+    justify-content: center;
+}
+.headerAux .gui a {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+}
+.headerAux .gui a:hover {
+    text-decoration: underline;
+}
+.feed {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    margin-top:20px;
+}
+.post {
+    margin-top: 20px;
+    max-width:480px;
+    justify-content: center;
+}
+.post p {
+    font-weight: bold;
+}
+.post img {
+    margin-right: 0px;
+    width: 480px;
+    border-radius: 20px;
+    height: 360px;
+}
+.data {
+    font-weight: normal;
+    color: #5f5f5f;
+}
+.rect {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-color: #8b8b8b;
+    height:5px;
+    border-radius: 20px;
+    width: 400px;
+}
+.rect.nav {
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: #000000;
+    margin: 0 auto;
+    width: 50px;
+}
+/* Responsividade */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 10px;
+    }
+    
+    .header .logo {
+        font-size: 20px; /* Diminui o tamanho da fonte logo */
+    }
+
+    .header .nav {
+        padding-right: 0;
+        gap: 15px;
+    }
+
+    .header .nav a {
+        font-size: 14px; /* Diminui o tamanho da fonte dos links */
+    }
+}
+
+/* Para telas menores que 480px (celulares em modo retrato) */
+@media (max-width: 480px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        text-align: center;
+    }
+
+    .header .logo {
+        font-size: 18px; /* Diminui ainda mais o tamanho da fonte logo */
+    }
+
+    .header .nav {
+        flex-direction: column; /* Empilha os links */
+        gap: 10px;
+    }
+    .rect {
+        width: 40vw;
+    }
+    .header .nav a {
+        font-size: 14px;
+    }
+    .post {
+        max-width: 100%; /* ocupa toda largura possível */
+        padding: 0 10px;
+        margin-top: 15px;
+    }
+    
+    .post img {
+        width: 100%; /* imagem ocupa 100% da largura do container */
+        height: auto; /* mantém proporção */
+        max-width: 480px; /* nunca maior que o original */
+        border-radius: 15px;
+    }
+}
+/* Estilo específico para links nos títulos das postagens */
+.post h2 a,
+.post h2 a:visited,
+.post h2 a:hover,
+.post h2 a:active {
+  color: inherit;
+  text-decoration: none;
+}
+/* Tela home */
+.home-title {
+    margin-top: 28vh; /* Ajusta conforme a altura da tela. Unico pra home por questao de centralização */
+}
+.background-svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("reciclagem.svg") no-repeat center center;
+  background-size: 300px; 
+  opacity: 0.1;
+  z-index: -1;
+}
+.index {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+.index p {
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.5;
+    font-size: 140%;
+}
+/* Chats */
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-left: 42%;
+}
+
+.chats {
+    display: flex;
+    margin-top: 15px;
+    align-items: flex-start;
+}
+
+.chats img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-content {
+    margin-right: 90px;
+    display: flex;
+    color: #5f5f5f;
+    margin-top: 6px;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.chat-header h1 {
+    color: #000000;
+    margin: 0;
+    font-size: 16px;
+}
+
+.chat-header .data {
+    margin-left: 10px;
+}
+
+.chats p {
+    margin: 0;
+    padding-left: 0;
+}
+/**/
+.tts-button {
+    position: fixed;  /* Para o botão ficar fixo na tela */
+    top: 150px;        /* Ajuste para a distância que você deseja do topo */
+    right: 10px;      /* Distância da borda direita */
+    z-index: 9999;    /* Garante que o botão esteja acima de outros elementos */
+    padding: 10px 20px;
+    background-color: #ff5722;  /* Cor de fundo do botão */
+    color: white;     /* Cor do texto */
+    border: none;     /* Remove bordas */
+    border-radius: 5px;  /* Arredonda as bordas */
+    cursor: pointer;  /* Cursor de clique */
+}
+/*tts-noticia*/
+.font-size-controls {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 9999;
+}
+
+.font-btn {
+    background-color: #ccc;
+    color: #000;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    opacity: 0.7;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.font-btn[data-size="small"] {
+    font-size: 12px;
+}
+
+.font-btn[data-size="medium"] {
+    font-size: 16px;
+}
+
+.font-btn[data-size="large"] {
+    font-size: 20px;
+}
+
+.font-btn.active {
+    background-color: #555;
+    color: #fff;
+    opacity: 1;
+}

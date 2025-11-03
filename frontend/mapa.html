@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Descarte</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts.js" defer></script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    /* Mapa e rota */
+    #map {
+      height: 500px;
+      width: 80%;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    #route-info {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    #route-container {
+      text-align: center;
+      margin: 30px auto 10px;
+    }
+
+    #route-container input {
+      padding: 8px;
+      width: 35%;
+      margin: 0 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    #route-container button {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    #route-container button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Descarte Amianto Já</div>
+    <nav class="nav">
+      <a href="./mapa.html">Mapa</a>
+      <a href="./news.html">Noticias</a>
+      <a href="./empresas.html">Empresas</a>
+      <a href="./index.html">Home</a>
+    </nav>
+  </header>
+
+  <h1 class="title" style="text-align:center;">Mapa de rotas de descarte</h1>
+<div class="index">
+  <p>Encontre a empresa mais próxima de demolição ou descarte licenciada para transportar amianto</p>
+</div>
+  <div id="route-container">
+    <input type="text" id="startAddress" placeholder="Seu endereço" />
+    <input type="number" id="numEmpresas" placeholder="Número de empresas" />
+    <button onclick="getRotasEmpresas()">Obter Rotas</button>
+  </div>
+
+  <div id="map"></div>
+  <div id="route-info"></div>
+  <div class="font-size-controls">
+    <button class="font-btn" data-size="small">A</button>
+    <button class="font-btn active" data-size="medium">A</button>
+    <button class="font-btn" data-size="large">A</button>
+  </div>
+  <button id="toggleButton" class="tts-button">🔊 Começar a ouvir</button>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="scripts.js"></script>
+<script>
+  // --- Centraliza o mapa inicialmente em São Paulo ---
+  const map = L.map('map').setView([-23.55052, -46.63331], 12);
+
+  // Camada de tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  let routeLine = null;
+  let startMarker = null;
+  let routeMarkers = [];
+
+  function getRotasEmpresas() {
+    const startAddress = document.getElementById("startAddress").value.trim();
+    const numEmpresas = parseInt(document.getElementById("numEmpresas").value, 10);
+
+    if (!startAddress || isNaN(numEmpresas)) {
+      alert("Preencha ambos os campos!");
+      return;
+    }
+
+    fetch("/api/rota/rota-empresas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ startAddress, numEmpresas })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data || !data.rotas) {
+        alert("Nenhuma rota encontrada.");
+        return;
+      }
+
+      // --- Limpa camadas antigas ---
+      if (routeLine) {
+        map.removeLayer(routeLine);
+        routeLine = null;
+      }
+      if (startMarker) {
+        map.removeLayer(startMarker);
+        startMarker = null;
+      }
+      routeMarkers.forEach(m => map.removeLayer(m));
+      routeMarkers = [];
+
+      // --- Usa o startCoord retornado pelo backend ---
+      const startLat = data.startCoord?.lat ?? -23.55052;
+      const startLon = data.startCoord?.lon ?? -46.63331;
+
+      startMarker = L.marker([startLat, startLon], {
+        icon: L.icon({
+          iconUrl: 'https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32]
+        })
+      }).addTo(map).bindPopup('<b>Ponto de partida</b>');
+
+      // --- Percorre cada rota retornada ---
+      data.rotas.forEach(r => {
+        const coords = r.coordinates; // [[lat, lon], ...]
+        if (!coords || coords.length === 0) return;
+
+        // Linha da rota
+        const line = L.polyline(coords, { color: 'blue' }).addTo(map);
+
+        // Mantém referência da última rota para ajustar o fitBounds
+        routeLine = line;
+
+        // Marcador no destino
+        const last = coords[coords.length - 1];
+        const dist = (r.distanceKm ?? 0).toFixed(1);
+        const tempo = (r.durationMin ?? 0).toFixed(0);
+
+        const popupHtml = `
+          <b>${r.empresa}</b><br>
+          Distância: ${dist} km<br>
+          Tempo: ${tempo} min
+        `;
+
+        const marker = L.marker(last).addTo(map).bindPopup(popupHtml);
+        routeMarkers.push(marker);
+      });
+
+      // Ajusta o zoom para incluir toda a rota e o ponto inicial
+      if (routeLine) {
+        map.fitBounds(routeLine.getBounds().extend([startLat, startLon]));
+      }
+    })
+    .catch(err => {
+      console.error("Erro ao buscar rotas:", err);
+      alert("Ocorreu um erro ao buscar as rotas.");
+    });
+  }
+</script>
+
+</body>
+</html>

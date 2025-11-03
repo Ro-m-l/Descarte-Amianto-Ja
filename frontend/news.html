@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Amianto - Sobre</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+            /* Added some space at the bottom */
+        }
+
+        .card {
+            font-size: 16px;
+            width: 100%;
+            /* Changed to be more responsive within the feed */
+            margin-bottom: 25px;
+            /* Added space between cards */
+            display: flex;
+            flex-direction: row;
+            box-shadow: 10px 8px 7px -4px rgba(0, 0, 0, 0.59);
+            -webkit-box-shadow: 10px 8px 7px -4px rgba(0, 0, 0, 0.59);
+            -moz-box-shadow: 10px 8px 7px -4px rgba(0, 0, 0, 0.59);
+            background-color: white;
+            /* Added background color */
+        }
+
+        .cardLeft {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-shrink: 0;
+            max-width: 64%;
+            margin-left: 1%;
+        }
+
+        .cardLeft>h1 {
+            margin-top: 2%;
+            margin-bottom: 1%;
+            font-size: 1.5em;
+            /* Adjusted font size */
+            color: black;
+            padding-left: 10px;
+        }
+
+        .cardLeft>p {
+            font-size: 0.9em;
+            /* Adjusted font size */
+            padding-top: 0.1%;
+            padding-left: 4%;
+            max-width: 95%;
+            color: gray;
+        }
+
+        .cardFooter {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            padding-top: 2%;
+            margin-top: auto;
+            margin-bottom: 1%;
+        }
+
+        .cardLeft>.cardFooter>span {
+            width: 50%;
+            color: rgb(195, 68, 68);
+            font-weight: 600;
+            font-size: 0.8em;
+            /* Adjusted font size */
+            margin-bottom: 1.5%;
+        }
+
+        .cardRight {
+            display: flex;
+            align-items: center;
+            justify-content: right;
+            flex-shrink: 1;
+        }
+
+        .cardRight img {
+            width: 100%;
+            max-height: auto;
+            aspect-ratio: 16 / 9;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">Descarte Amianto Já</div>
+        <nav class="nav">
+            <a href="./mapa.html">Mapa</a>
+            <a href="./news.html">Noticias</a>
+            <a href="./empresas.html">Empresas</a>
+            <a href="./index.html">Home</a>
+        </nav>
+    </header>
+    <header class="header headerAux">
+        <nav class="gui">
+            <a href="./news.html">Noticias do Amianto</a>
+            <div class="rect nav"></div>
+        </nav>
+        <nav class="gui">
+            <a href="./remocao.html">Remoção e segurança</a>
+        </nav>
+    </header>
+
+    <div class="feed">
+        <div class="container" id="dynamic-news-container">
+        </div>
+
+
+    </div>
+  <div class="font-size-controls">
+    <button class="font-btn" data-size="small">A</button>
+    <button class="font-btn active" data-size="medium">A</button>
+    <button class="font-btn" data-size="large">A</button>
+  </div>
+    <button id="toggleButton" class="tts-button">🔊 Começar a ouvir</button>
+    <script src="scripts.js"></script>
+
+    <script>
+        function createCardComponent(cardData) {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('card');
+            cardElement.innerHTML = `
+                <div class="cardLeft">
+                    <h1><a href="${cardData.link}" target="_blank">${cardData.title}</a></h1>
+                    <p>${cardData.content}</p>
+                    <div class="cardFooter">
+                        <span>${cardData.author || 'Unknown Source'}</span>
+                    </div>
+                </div>
+                <div class="cardRight">
+                    <img src="${cardData.imageUrl || 'https://via.placeholder.com/200'}" alt="Card image">
+                </div>
+            `;
+            return cardElement;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Updated to target the new container ID
+            const container = document.getElementById('dynamic-news-container');
+            container.innerHTML = '<p style="text-align: center;">Loading latest news...</p>';
+
+            fetch('/api/news')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network error or server is down.');
+                    }
+                    return response.json();
+                })
+                .then(articles => {
+                    container.innerHTML = '';
+                    articles.forEach(articleData => {
+                        const newCard = createCardComponent(articleData);
+                        container.appendChild(newCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Houve um problema em receber as notícias:', error);
+                    container.innerHTML = '<p style="text-align: center;">Não foi possível carregar o feed de notícias. Por favor tente novamente depois.</p>';
+                });
+        });
+    </script>
+</body>
+
+</html>
