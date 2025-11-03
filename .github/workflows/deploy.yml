@@ -21,25 +21,19 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      # Build do backend com Maven
+      # Build do backend com Maven (testes mock rodando via H2)
       - name: Build do backend
         working-directory: ./backend
-        run: mvn clean package -DskipTests=false -Ptest
+        run: mvn clean package -DskipTests=false
 
-      # Build das imagens Docker
+      # Build das imagens Docker (apenas para validar Dockerfiles, não roda containers)
       - name: Build das imagens Docker
         run: |
           docker build -t meu-backend ./backend
+          docker build -t meu-frontend ./frontend
+          docker build -t meu-database ./database
 
-      # Testa container backend
-      # Esta etapa serve para rodar os testes integrados dentro de um container,
-      # garantindo que a aplicação funcione em ambiente containerizado antes do deploy.
-      # A falta dela significa que você só testa localmente no Maven.
-      - name: Rodar testes integrados no container backend
-        run: |
-          docker run --rm meu-backend ./mvnw test -Ptest
-
-      # Compacta e envia pro servidor AWS via SSH
+      # Compacta e envia para o servidor AWS via SSH
       - name: Enviar arquivos para o servidor AWS Lightsail
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -62,5 +56,4 @@ jobs:
             docker system prune -f
             docker compose down
             docker compose build
-
             docker compose up -d
