@@ -32,9 +32,10 @@ services:
     build: ./frontend
     container_name: nginx_frontend
     ports:
-      - "8081:80" #era 80:80, melhor nao rodar no 80 no sistema local pois o sistema usa essa porta, usar só no EC2
+      - "80:80"
     depends_on:
       - backend
 
 volumes:
+
   mysql_data:
