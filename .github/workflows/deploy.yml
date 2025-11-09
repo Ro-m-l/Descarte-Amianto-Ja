@@ -21,6 +21,15 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      # Cache Maven packages
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       # Build do backend com Maven (testes mock rodando via H2)
       - name: Build do backend
         working-directory: ./backend
