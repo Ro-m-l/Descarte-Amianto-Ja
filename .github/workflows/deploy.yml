@@ -30,7 +30,6 @@ jobs:
       - name: Build das imagens Docker
         run: |
           docker build -t meu-backend ./backend
-          docker build -t meu-frontend ./frontend
 
       # Compacta e envia para o servidor AWS via SSH
       - name: Enviar arquivos para o servidor AWS Lightsail
