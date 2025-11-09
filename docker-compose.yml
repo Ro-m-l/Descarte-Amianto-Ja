@@ -38,7 +38,7 @@ services:
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro   # Monta os certificados SSL
-      - ./frontend/dist:/usr/share/nginx/html  # (ajuste se o build do front estiver em outro lugar)
+      - ./frontend:/usr/share/nginx/html  # (ajuste para - ./frontend/dist:/usr/share/nginx/html após o react)
     depends_on:
       - backend
 
