@@ -103,20 +103,13 @@ export default function Mapa() {
         routeMarkers.forEach((m) => map.removeLayer(m));
         routeMarkers = [];
 
-        // Ícone de destino
-        const destinoIcon = L.icon({
-          iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png",
-          iconSize: [32, 32],
-          iconAnchor: [16, 32],
-        });
-
         // Ponto inicial
         const startLat = data.startCoord?.lat ?? -23.55052;
         const startLon = data.startCoord?.lon ?? -46.63331;
 
         startMarker = L.marker([startLat, startLon], {
           icon: L.icon({
-            iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
+            iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",  // Ícone de ponto de partida (vermelho)
             iconSize: [32, 32],
             iconAnchor: [16, 32],
           }),
@@ -142,8 +135,14 @@ export default function Mapa() {
             Tempo: ${tempo} min
           `;
 
-          // Marker do destino com ícone azul
-          const marker = L.marker(last, { icon: destinoIcon }).addTo(map).bindPopup(popupHtml);
+          // Ícone azul para o destino
+          const destinationIcon = L.icon({
+            iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png", // Ícone azul
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          });
+
+          const marker = L.marker(last, { icon: destinationIcon }).addTo(map).bindPopup(popupHtml);
           routeMarkers.push(marker);
         });
 
@@ -156,6 +155,7 @@ export default function Mapa() {
         alert("Ocorreu um erro ao buscar as rotas.");
       }
     }
+
 
     // Atribui funções aos botões
     const btnRotas = document.getElementById("btnRotas");
@@ -175,31 +175,31 @@ export default function Mapa() {
         Encontre a empresa licenciada mais próxima especializada em demolição de construções e descarte seguro de amianto.
       </p>
 
-      <div className={styles.routeContainer}>
-        <div className={styles.inputGroup}>
-          <input
-            type="text"
-            id="startAddress"
-            placeholder="Seu endereço"
-            className={styles.input}
-          />
-          <button id="btnGeo" className={styles.geoButton}>
-            📍 Usar minha localização
-          </button>
-        </div>
+    <div className={styles.routeContainer}>
+    <div className={styles.inputGroup}>
+        <input
+        type="text"
+        id="startAddress"
+        placeholder="Seu endereço"
+        className={styles.input}
+        />
+        <button id="btnGeo" className={styles.geoButton}>
+        📍 Usar minha localização
+        </button>
+    </div>
 
-        <div className={styles.inputGroup}>
-          <input
-            type="number"
-            id="numEmpresas"
-            placeholder="Número de empresas"
-            className={styles.inputNum}
-          />
-          <button id="btnRotas" className={styles.button}>
-            Obter Rotas
-          </button>
-        </div>
-      </div>
+    <div className={styles.inputGroup}>
+        <input
+        type="number"
+        id="numEmpresas"
+        placeholder="Número de empresas"
+        className={styles.inputNum}
+        />
+        <button id="btnRotas" className={styles.button}>
+        Obter Rotas
+        </button>
+    </div>
+    </div>
 
       <div id="map" className={styles.map}></div>
       <div id="route-info" className={styles.routeInfo}></div>
