@@ -68,7 +68,7 @@ export default function Mapa() {
       );
     }
 
-    // Função para buscar rotas
+    // Função para buscar rotas 
     async function getRotasEmpresas() {
       const startAddress = document.getElementById("startAddress").value.trim();
       const numEmpresas = parseInt(document.getElementById("numEmpresas").value, 10);
