@@ -2,7 +2,6 @@ package com.example.SpringBoot2.controllers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.SpringBoot2.models.EmpresaModel;
@@ -95,7 +94,9 @@ public class RotaController {
         try {
             String startAddress = (String) request.get("startAddress");
             int numEmpresas = (int) request.get("numEmpresas");
-
+            if (numEmpresas > 50) {
+                numEmpresas = 50;
+            }
             // Geocode do usuário
             GeocodeService.Coord startCoord = geocodeService.geocode(startAddress);
             System.out.println("Start Coord: " + startCoord.lat + "," + startCoord.lon);

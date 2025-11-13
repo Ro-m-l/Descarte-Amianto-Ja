@@ -14,7 +14,7 @@ export default function Mapa() {
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
-    let routeLine = null;
+    let routeLines = [];  // Variável para armazenar todas as linhas de rota
     let startMarker = null;
     let routeMarkers = [];
 
@@ -92,16 +92,15 @@ export default function Mapa() {
         }
 
         // Limpa rotas antigas
-        if (routeLine) {
-          map.removeLayer(routeLine);
-          routeLine = null;
-        }
+        routeLines.forEach(line => map.removeLayer(line));
+        routeMarkers.forEach(m => map.removeLayer(m));
+        routeLines = [];  // Limpa o array de rotas antigas
+        routeMarkers = []; // Limpa o array de marcadores de rotas
+
         if (startMarker) {
           map.removeLayer(startMarker);
           startMarker = null;
         }
-        routeMarkers.forEach((m) => map.removeLayer(m));
-        routeMarkers = [];
 
         // Ponto inicial
         const startLat = data.startCoord?.lat ?? -23.55052;
@@ -123,7 +122,7 @@ export default function Mapa() {
           if (!coords || coords.length === 0) return;
 
           const line = L.polyline(coords, { color: "blue" }).addTo(map);
-          routeLine = line;
+          routeLines.push(line);  // Adiciona a linha ao array
 
           const last = coords[coords.length - 1];
           const dist = (r.distanceKm ?? 0).toFixed(1);
@@ -143,19 +142,18 @@ export default function Mapa() {
           });
 
           const marker = L.marker(last, { icon: destinationIcon }).addTo(map).bindPopup(popupHtml);
-          routeMarkers.push(marker);
+          routeMarkers.push(marker);  // Adiciona o marcador ao array
         });
 
         // Ajusta zoom
-        if (routeLine) {
-          map.fitBounds(routeLine.getBounds().extend([startLat, startLon]));
+        if (routeLines.length > 0) {
+          map.fitBounds(routeLines[0].getBounds().extend([startLat, startLon]));
         }
       } catch (err) {
         console.error("Erro ao buscar rotas:", err);
         alert("Ocorreu um erro ao buscar as rotas.");
       }
     }
-
 
     // Atribui funções aos botões
     const btnRotas = document.getElementById("btnRotas");
@@ -165,7 +163,12 @@ export default function Mapa() {
     if (btnGeo) btnGeo.onclick = getUserLocation;
 
     // Cleanup
-    return () => map.remove();
+    return () => {
+      routeLines.forEach(line => map.removeLayer(line)); // Remove as rotas ao sair do componente
+      routeMarkers.forEach(m => map.removeLayer(m)); // Remove os marcadores de rotas
+      if (startMarker) map.removeLayer(startMarker);  // Remove o marcador inicial
+      map.remove();  // Remove o mapa
+    };
   }, []);
 
   return (
@@ -175,31 +178,31 @@ export default function Mapa() {
         Encontre a empresa licenciada mais próxima especializada em demolição de construções e descarte seguro de amianto.
       </p>
 
-    <div className={styles.routeContainer}>
-    <div className={styles.inputGroup}>
-        <input
-        type="text"
-        id="startAddress"
-        placeholder="Seu endereço"
-        className={styles.input}
-        />
-        <button id="btnGeo" className={styles.geoButton}>
-        📍 Usar minha localização
-        </button>
-    </div>
+      <div className={styles.routeContainer}>
+        <div className={styles.inputGroup}>
+          <input
+            type="text"
+            id="startAddress"
+            placeholder="Seu endereço"
+            className={styles.input}
+          />
+          <button id="btnGeo" className={styles.geoButton}>
+            📍 Usar minha localização
+          </button>
+        </div>
 
-    <div className={styles.inputGroup}>
-        <input
-        type="number"
-        id="numEmpresas"
-        placeholder="Número de empresas"
-        className={styles.inputNum}
-        />
-        <button id="btnRotas" className={styles.button}>
-        Obter Rotas
-        </button>
-    </div>
-    </div>
+        <div className={styles.inputGroup}>
+          <input
+            type="number"
+            id="numEmpresas"
+            placeholder="Número de empresas"
+            className={styles.inputNum}
+          />
+          <button id="btnRotas" className={styles.button}>
+            Obter Rotas
+          </button>
+        </div>
+      </div>
 
       <div id="map" className={styles.map}></div>
       <div id="route-info" className={styles.routeInfo}></div>
