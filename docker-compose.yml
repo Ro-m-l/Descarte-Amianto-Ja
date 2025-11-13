@@ -38,10 +38,8 @@ services:
     volumes:
       - ./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro  # Certificados SSL
-      - ./frontend/dist:/usr/share/nginx/html  # Arquivos estáticos do React
     depends_on:
       - backend
-
 
 volumes:
   mysql_data:
