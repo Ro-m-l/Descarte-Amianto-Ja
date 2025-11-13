@@ -1,0 +1,98 @@
+/* Garantir que o conteúdo não ultrapasse os limites da tela */
+body, html {
+  overflow-x: hidden; /* Desabilita o scroll horizontal */
+  margin: 0; /* Remove margens que podem causar o overflow */
+}
+
+.header {
+  position: relative;
+  background-color: var(--cor-primaria);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: var(--cor-terciaria);
+  overflow: hidden; /* Garante que nada ultrapasse o header */
+}
+
+.logo {
+  font-size: 24px;
+  position: relative; /* Necessário para o posicionamento do botão */
+  display: inline-block; /* Garante que o logo ocupe só o espaço necessário */
+}
+
+.nav {
+  padding-right: 50px;
+  display: flex;
+  gap: 20px;
+}
+
+.nav a {
+  color: var(--cor-terciaria);
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .nav {
+    padding-right: 0;
+    gap: 15px;
+  }
+
+  .nav a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+    padding: 10px 20px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+  }
+
+    .nav:not(.open) {
+    display: none; /* Esconde o menu quando não está aberto */
+    }
+
+  /* Botão + para abrir o menu */
+  .dropdownButton {
+    position: absolute; /* Fica fora do fluxo do flex */
+    right: 25px; /* Garante que o botão fique ao lado do logo com espaçamento */
+    top: 25px; /* Centraliza verticalmente */
+    transform: translateY(-50%); /* Ajuste fino para centralizar verticalmente */
+    background: none;
+    border: 2px solid red; /* Borda para estilizar */
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--cor-terciaria);
+    z-index: 999; /* Garante que o botão fique acima de outros elementos */
+  }
+}

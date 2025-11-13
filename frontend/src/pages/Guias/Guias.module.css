@@ -1,0 +1,6 @@
+/* modulo compartilhado para noticias e guias */
+.feed {
+    position: relative;
+    height: auto;
+    flex-direction: column;
+}

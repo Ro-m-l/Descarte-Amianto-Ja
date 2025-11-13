@@ -1,0 +1,76 @@
+.map {
+  height: 500px;
+  width: 80%;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.routeInfo {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.routeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 800px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.index { 
+    margin-top: 40px;
+    margin-bottom: 50px;
+    font-size: 140%;
+    max-width: 650px;
+    text-align: center;
+    word-wrap: break-word;
+    margin-right: auto; margin-left: auto;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: row; /* agora em linha por padrão */
+  gap: 8px;
+  width: 100%;
+}
+
+
+
+.button,
+.geoButton {
+  background-color: #0077ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.button:hover,
+.geoButton:hover {
+  background-color: #005fcc;
+}
+
+.inputNum {
+  width: 200px; /* aumenta para caber o texto inteiro */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: left; /* deixa placeholder e texto à esquerda */
+}

@@ -11,7 +11,7 @@ import java.net.URL;
 @Service
 public class WebScrapingService {
 
-    private static final String DEFAULT_IMAGE_URL = "https://via.placeholder.com/200";
+    private static final String DEFAULT_IMAGE_URL = "";
 
     public ScrapedData ScrapeArticleData(String articleUrl) {
         String pageTitle = "Fonte Desconhecida";

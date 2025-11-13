@@ -1,0 +1,60 @@
+/* Ajuste do título na Home */
+.homeTitle {
+  position: fixed; /* Fixa o título na tela */
+  top: 26vh; /* Posição do título na tela (ajuste conforme necessário) */
+  left: 50%;
+  transform: translateX(-50%); /* Centraliza o título */
+  z-index: 2; /* Garante que o título fique sobre o fundo */
+}
+
+/* Estilo do fundo SVG */
+.backgroundSvg {
+  position: fixed;  /* Fixa o fundo no lugar */
+  top: 28vh;         /* Coloca o fundo na mesma posição que o título */
+  left: 50%;
+  transform: translateX(-50%); /* Centraliza o fundo horizontalmente */
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  background: url("/assets/reciclagem.svg") no-repeat center center;
+  background-size: contain;
+  opacity: 0.1;
+  z-index: 0; /* Coloca o fundo atrás do conteúdo */
+}
+
+/* Container da home */
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative; /* necessário para que a div absoluta seja relativa a esse container */
+  z-index: 1; /* Garante que o conteúdo do container fique abaixo do título */
+  margin-top: 0; /* Remove qualquer margem que possa deslocar o conteúdo */
+}
+
+/* Texto da home */
+.intro {
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.5;
+  font-size: 140%;
+  word-wrap: break-word;
+  word-break: break-word;
+  position: fixed; /* Fixa o texto na tela */
+  z-index: 1; /* Garante que o texto fique sobre o fundo */
+  top: 35vh; /* Ajuste a distância do topo (não usando `position: fixed`, então pode controlar o espaçamento com `top` */
+}
+
+/* Estilos do Menu Dropdown */
+.nav {
+  position: relative;
+  z-index: 3; /* Garante que o menu dropdown fique sobre o conteúdo */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 480px) {
+  .intro {
+    margin-top: 1vh; /* Ajuste a posição do texto para telas pequenas */
+  }
+}

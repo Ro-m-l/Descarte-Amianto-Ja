@@ -1,0 +1,83 @@
+.acessibilidade {
+  position: fixed;   /* agora acompanha o scroll */
+  top: 80px;         /* distância do topo da tela */
+  right: 10px;       /* canto direito */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Controles de tamanho da fonte */
+.font-size-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.font-btn {
+  background-color: #ccc;
+  color: #000;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.font-btn[data-size="small"] {
+  font-size: 12px;
+}
+
+.font-btn[data-size="medium"] {
+  font-size: 16px;
+}
+
+.font-btn[data-size="large"] {
+  font-size: 20px;
+}
+
+.font-btn:hover {
+  opacity: 1;
+}
+
+.font-btn.active {
+  background-color: #555;
+  color: #fff;
+  opacity: 1;
+}
+
+/* Botão de TTS */
+.tts-button {
+  padding: 10px 20px;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tts-button:hover {
+  background-color: #e64a19;
+}
+
+@media (max-width: 480px) {
+  /* Acessibilidade centralizada abaixo do nav */
+  .acessibilidade {
+    position: static; /* agora é parte do flexbox do header */
+    flex-direction: row; /* ou column, se preferir empilhar os botões */
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    width: 100%; /* ocupa largura total */
+  }
+
+  .font-btn,
+  .tts-button {
+    width: auto; /* ou 100% se quiser que os botões ocupem toda a largura */
+    text-align: center;
+  }
+}

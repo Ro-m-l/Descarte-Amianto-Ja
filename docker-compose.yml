@@ -28,20 +28,16 @@ services:
     depends_on:
       - mysql
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx_server
+  frontend:
+    build: ./frontend  # Direciona para a pasta onde está o Dockerfile
+    container_name: react_frontend
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "8081:80"  # 8081 para testes no PC
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt:ro   # Monta os certificados SSL
-      - ./frontend:/usr/share/nginx/html  # (ajuste para - ./frontend/dist:/usr/share/nginx/html após o react)
+      - ./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
 
 volumes:
-
   mysql_data:

@@ -1,0 +1,24 @@
+:root {
+  /* cores padrão */
+  --cor-primaria: #000000;
+  --cor-secundaria: #8b8b8b;
+  --cor-terciaria: #ffffff;
+  --cor-hover: #666666;
+  --cor-header-aux: #aaa;
+}
+/* estrutura básica */
+html, body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    line-height: 1.6;
+    padding: 0;
+}
+.center-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.title {
+    flex-direction: column;
+    margin-top: 20px;
+}
