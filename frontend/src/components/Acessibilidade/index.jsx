@@ -20,7 +20,7 @@ const Acessibilidade = () => {
       // Impede que clique em botões do painel ativem leitura
       if (e.target.closest(`.${styles.acessibilidade}`)) return;
 
-      const text = e.target.innerText.trim();
+      const text = e.target.innerText.trim() || e.target.placeholder || e.target.value;
       if (!text) return;
 
       // Cancela fala atual antes de iniciar a nova
@@ -42,16 +42,49 @@ const Acessibilidade = () => {
       window.speechSynthesis.speak(utterance);
     };
 
+    const handleFocus = (e) => {
+      if (!ttsActive) return;
+
+      const text = e.target.placeholder || e.target.value || e.target.innerText;
+      if (!text) return;
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "pt-BR";
+
+      setIsSpeaking(true);
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    };
+
     if (ttsActive) {
       document.addEventListener("click", handleClick);
+      document.querySelectorAll("input, textarea").forEach((input) => {
+        input.addEventListener("focus", handleFocus);
+      });
     } else {
       document.removeEventListener("click", handleClick);
+      document.querySelectorAll("input, textarea").forEach((input) => {
+        input.removeEventListener("focus", handleFocus);
+      });
       window.speechSynthesis.cancel(); // para tudo ao desativar
       setIsSpeaking(false);
     }
 
     return () => {
       document.removeEventListener("click", handleClick);
+      document.querySelectorAll("input, textarea").forEach((input) => {
+        input.removeEventListener("focus", handleFocus);
+      });
     };
   }, [ttsActive]);
 
