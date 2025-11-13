@@ -10,10 +10,10 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Limpa o cache do npm para evitar pacotes corrompidos
-RUN npm cache clean --force
+#RUN npm cache clean --force
 
 # Exclui os diretórios node_modules e dist para garantir que o cache do build seja limpo
-RUN rm -rf node_modules dist
+#RUN rm -rf node_modules dist
 
 # Copia o restante do código da aplicação para dentro do contêiner
 COPY . .
