@@ -35,12 +35,10 @@ COPY --from=frontend /app/dist /usr/share/nginx/html
 
 # Expondo a porta 80
 EXPOSE 80
+EXPOSE 443
 
 # Configuração de Nginx já definida no seu default.conf
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# Copia os certificados SSL para o diretório de certificados do Nginx
-COPY ./certificates/* /etc/letsencrypt/
 
 # Inicia o Nginx
 CMD ["nginx", "-g", "daemon off;"]
