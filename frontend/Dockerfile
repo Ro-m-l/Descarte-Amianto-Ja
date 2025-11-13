@@ -12,6 +12,8 @@ RUN npm cache clean --force
 # Exclui os diretórios node_modules e dist para garantir que o cache do build seja limpo
 RUN rm -rf node_modules dist
 
+RUN npm cache verify
+
 # Instala as dependências novamente após copiar o código (caso o diretório node_modules tenha sido excluído anteriormente)
 RUN npm install
 
@@ -25,7 +27,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copia o build do React para o diretório do Nginx
-COPY --from=frontend /app/build /usr/share/nginx/html
+COPY --from=frontend /app/dist /usr/share/nginx/html
 
 # Corrige permissões no diretório do Nginx
 RUN chmod -R 755 /usr/share/nginx/html
