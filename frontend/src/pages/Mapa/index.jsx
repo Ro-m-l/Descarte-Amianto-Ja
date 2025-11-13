@@ -135,6 +135,7 @@ export default function Mapa() {
             Tempo: ${tempo} min
           `;
 
+                    // Ícone azul para o destino
           // Ícone azul para o destino
           const destinationIcon = L.icon({
             iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png", // Ícone azul
@@ -142,8 +143,11 @@ export default function Mapa() {
             iconAnchor: [16, 32],
           });
 
+          console.log('Ícone de destino configurado com URL:', destinationIcon.options.iconUrl);
+
           const marker = L.marker(last, { icon: destinationIcon }).addTo(map).bindPopup(popupHtml);
           routeMarkers.push(marker);
+
         });
 
         // Ajusta zoom
@@ -172,7 +176,7 @@ export default function Mapa() {
     <main>
       <h1 className="title center-flex">Mapa de Rotas de Descarte</h1>
       <p className={`title center-flex ${styles.index}`}>
-        Encontre a empresa licenciada mais próxima especializada em demolição de construções e descarte seguro de amianto.
+        TESTE - Encontre a empresa licenciada mais próxima especializada em demolição de construções e descarte seguro de amianto.
       </p>
 
     <div className={styles.routeContainer}>
