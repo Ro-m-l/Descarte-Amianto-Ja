@@ -18,19 +18,6 @@ export default function Mapa() {
     let startMarker = null;
     let routeMarkers = [];
 
-    // Ícones
-    const startIcon = L.icon({
-      iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-    });
-
-    const destinoIcon = L.icon({
-      iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png",
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-    });
-
     // Função para obter localização do usuário
     async function getUserLocation() {
       if (!navigator.geolocation) {
@@ -57,7 +44,13 @@ export default function Mapa() {
 
             // Adiciona marcador no mapa
             if (startMarker) map.removeLayer(startMarker);
-            startMarker = L.marker([latitude, longitude], { icon: startIcon })
+            startMarker = L.marker([latitude, longitude], {
+              icon: L.icon({
+                iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+              }),
+            })
               .addTo(map)
               .bindPopup("<b>Sua localização atual</b>")
               .openPopup();
@@ -110,11 +103,24 @@ export default function Mapa() {
         routeMarkers.forEach((m) => map.removeLayer(m));
         routeMarkers = [];
 
+        // Ícone de destino
+        const destinoIcon = L.icon({
+          iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png",
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+        });
+
         // Ponto inicial
         const startLat = data.startCoord?.lat ?? -23.55052;
         const startLon = data.startCoord?.lon ?? -46.63331;
 
-        startMarker = L.marker([startLat, startLon], { icon: startIcon })
+        startMarker = L.marker([startLat, startLon], {
+          icon: L.icon({
+            iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          }),
+        })
           .addTo(map)
           .bindPopup("<b>Ponto de partida</b>");
 
@@ -136,6 +142,7 @@ export default function Mapa() {
             Tempo: ${tempo} min
           `;
 
+          // Marker do destino com ícone azul
           const marker = L.marker(last, { icon: destinoIcon }).addTo(map).bindPopup(popupHtml);
           routeMarkers.push(marker);
         });
