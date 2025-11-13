@@ -25,7 +25,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copia o build do React para o diretório do Nginx
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=frontend /app/build /usr/share/nginx/html
 
 # Corrige permissões no diretório do Nginx
 RUN chmod -R 755 /usr/share/nginx/html
