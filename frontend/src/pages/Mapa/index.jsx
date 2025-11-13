@@ -18,6 +18,19 @@ export default function Mapa() {
     let startMarker = null;
     let routeMarkers = [];
 
+    // Ícones
+    const startIcon = L.icon({
+      iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
+
+    const destinoIcon = L.icon({
+      iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/blue-dot.png",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
+
     // Função para obter localização do usuário
     async function getUserLocation() {
       if (!navigator.geolocation) {
@@ -44,13 +57,7 @@ export default function Mapa() {
 
             // Adiciona marcador no mapa
             if (startMarker) map.removeLayer(startMarker);
-            startMarker = L.marker([latitude, longitude], {
-              icon: L.icon({
-                iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-              }),
-            })
+            startMarker = L.marker([latitude, longitude], { icon: startIcon })
               .addTo(map)
               .bindPopup("<b>Sua localização atual</b>")
               .openPopup();
@@ -107,13 +114,7 @@ export default function Mapa() {
         const startLat = data.startCoord?.lat ?? -23.55052;
         const startLon = data.startCoord?.lon ?? -46.63331;
 
-        startMarker = L.marker([startLat, startLon], {
-          icon: L.icon({
-            iconUrl: "https://maps.gstatic.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-          }),
-        })
+        startMarker = L.marker([startLat, startLon], { icon: startIcon })
           .addTo(map)
           .bindPopup("<b>Ponto de partida</b>");
 
@@ -135,7 +136,7 @@ export default function Mapa() {
             Tempo: ${tempo} min
           `;
 
-          const marker = L.marker(last).addTo(map).bindPopup(popupHtml);
+          const marker = L.marker(last, { icon: destinoIcon }).addTo(map).bindPopup(popupHtml);
           routeMarkers.push(marker);
         });
 
@@ -167,31 +168,31 @@ export default function Mapa() {
         Encontre a empresa licenciada mais próxima especializada em demolição de construções e descarte seguro de amianto.
       </p>
 
-    <div className={styles.routeContainer}>
-    <div className={styles.inputGroup}>
-        <input
-        type="text"
-        id="startAddress"
-        placeholder="Seu endereço"
-        className={styles.input}
-        />
-        <button id="btnGeo" className={styles.geoButton}>
-        📍 Usar minha localização
-        </button>
-    </div>
+      <div className={styles.routeContainer}>
+        <div className={styles.inputGroup}>
+          <input
+            type="text"
+            id="startAddress"
+            placeholder="Seu endereço"
+            className={styles.input}
+          />
+          <button id="btnGeo" className={styles.geoButton}>
+            📍 Usar minha localização
+          </button>
+        </div>
 
-    <div className={styles.inputGroup}>
-        <input
-        type="number"
-        id="numEmpresas"
-        placeholder="Número de empresas"
-        className={styles.inputNum}
-        />
-        <button id="btnRotas" className={styles.button}>
-        Obter Rotas
-        </button>
-    </div>
-    </div>
+        <div className={styles.inputGroup}>
+          <input
+            type="number"
+            id="numEmpresas"
+            placeholder="Número de empresas"
+            className={styles.inputNum}
+          />
+          <button id="btnRotas" className={styles.button}>
+            Obter Rotas
+          </button>
+        </div>
+      </div>
 
       <div id="map" className={styles.map}></div>
       <div id="route-info" className={styles.routeInfo}></div>
