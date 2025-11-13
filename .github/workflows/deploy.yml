@@ -62,7 +62,7 @@ jobs:
             # Limpa containers e imagens antigas, preservando volumes
             docker system prune -f --volumes=false
             # Para containers antigos do compose, sem remover volumes
-            docker-compose down
+            docker-compose down --remove-orphans
             # Rebuild e start
             docker-compose build
             docker-compose up -d
