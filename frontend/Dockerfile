@@ -6,11 +6,8 @@ WORKDIR /app
 # Copia o package.json e o package-lock.json para instalar as dependências
 COPY package.json package-lock.json ./
 
-# Limpa o cache do npm para evitar pacotes corrompidos
-#RUN npm cache clean --force
-
 # Exclui os diretórios node_modules e dist para garantir que o cache do build seja limpo
-#RUN rm -rf node_modules dist
+RUN rm -rf node_modules dist
 
 # Instala as dependências novamente após copiar o código (caso o diretório node_modules tenha sido excluído anteriormente)
 RUN npm install
