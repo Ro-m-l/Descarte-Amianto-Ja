@@ -38,10 +38,13 @@ jobs:
           echo "DBPASS=${{ secrets.DB_PASSWORD }}" >> .env
           echo "SPRING_DATASOURCE_URL=${{ secrets.DB_URL }}" >> .env
           echo "APP_ORS_API_KEY=${{ secrets.ORS_API_KEY }}" >> .env
+          
 
       # Build do backend com Maven (testes mock rodando via H2)
       - name: Build do backend
         working-directory: ./backend
+        env:
+          ORS_API_KEY: ${{ secrets.ORS_API_KEY }}
         run: mvn clean package -DskipTests=false
 
       # Build das imagens Docker (apenas para validar Dockerfiles, não roda containers)
