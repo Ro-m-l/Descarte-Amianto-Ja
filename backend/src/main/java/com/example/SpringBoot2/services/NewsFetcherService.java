@@ -36,7 +36,6 @@ public class NewsFetcherService {
                 "https://www.google.com/alerts/feeds/13084519227054492460/2537531881959246548" };
     }
 
-    
     private boolean isTestProfileActive() {
         return "test".equals(System.getProperty("spring.profiles.active"));
     }
@@ -46,7 +45,6 @@ public class NewsFetcherService {
         if (!isTestProfileActive()) {
             fetchNewsFeed();
         }
-        fetchNewsFeed();
     }
 
     @Scheduled(fixedRate = 3600000)
@@ -126,7 +124,8 @@ public class NewsFetcherService {
     }
 
     @Transactional
-    public void fetchNewsFeedForTest() { // mesma lógica de fetchNewsFeed, mas sem if(isTestProfileActive()). usado para testes
+    public void fetchNewsFeedForTest() { // mesma lógica de fetchNewsFeed, mas sem if(isTestProfileActive()). usado para
+                                         // testes
         System.out.println("Buscando últimas notícias do feed RSS...");
         // RestTemplate can be created once outside the loop
         RestTemplate restTemplate = new RestTemplate();

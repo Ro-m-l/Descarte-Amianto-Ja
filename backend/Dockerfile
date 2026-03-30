@@ -21,4 +21,4 @@ RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
 EXPOSE 8080
 
 # Usa wait-for-it antes de iniciar o Spring Boot
-ENTRYPOINT ["/wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["/wait-for-it.sh", "db:5432", "--", "java", "-jar", "/app/app.jar"]

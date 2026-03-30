@@ -41,15 +41,8 @@ public class EmpresaModel implements Serializable {
         this.endereco = endereco;
     }
 
-    /*
-    // Quando formos salvar imagens diretamente no banco
-    // @Lob indica que é um campo grande (BLOB)
-    @Lob
-    @Column
-    private byte[] imagem;
-    */
-
-    // Getters apenas (não precisa de setters, já que a tabela não será alterada via site)
+    // Getters apenas (não precisa de setters, já que a tabela não será alterada via
+    // site)
     public Integer getIdEmpresa() {
         return idEmpresa;
     }
@@ -77,12 +70,14 @@ public class EmpresaModel implements Serializable {
     public String getCoordenadas() {
         return coordenadas;
     }
-    
+
     public void setCoordenadas(String coordenadas) {
         this.coordenadas = coordenadas;
     }
 
-  /*public byte[] getImagem() {
-        return imagem;
-    } */  
+    /*
+     * public byte[] getImagem() {
+     * return imagem;
+     * }
+     */
 }

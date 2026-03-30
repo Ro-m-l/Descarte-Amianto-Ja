@@ -1,4 +1,3 @@
-
 package com.example.SpringBoot2.models;
 
 import jakarta.persistence.Column;
@@ -6,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,14 +22,13 @@ public class Article {
 
     private String publishDate;
 
-    @Lob
-    @Column(length = 5000)
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(length = 1024)
     private String imageUrl;
 
-    @Column(length = 1024)  
+    @Column(length = 1024)
     private String author;
 
     public Article() {
@@ -101,5 +98,4 @@ public class Article {
     public void setAuthor(String author) {
         this.author = author;
     }
-
 }

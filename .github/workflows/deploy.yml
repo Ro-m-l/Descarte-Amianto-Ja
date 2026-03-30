@@ -30,6 +30,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # Criar .env antes de buildar
+      - name: Create .env file
+        run: |
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DBUSER=${{ secrets.DB_USER }}" >> .env
+          echo "DBPASS=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "SPRING_DATASOURCE_URL=${{ secrets.DB_URL }}" >> .env
+          echo "ORS_API_KEY=${{ secrets.ORS_API_KEY }}" >> .env
+
       # Build do backend com Maven (testes mock rodando via H2)
       - name: Build do backend
         working-directory: ./backend
