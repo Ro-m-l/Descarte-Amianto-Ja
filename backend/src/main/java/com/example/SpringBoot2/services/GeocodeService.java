@@ -14,14 +14,18 @@ import java.net.URLEncoder;
 @Service
 public class GeocodeService {
 
-    @Value("${ORS_API_KEY}")
+    @Value("${APP_ORS_API_KEY}")
     private String apiKey;
 
     // Classe para coordenadas
     public static class Coord {
         public double lat;
         public double lon;
-        public Coord(double lat, double lon) { this.lat = lat; this.lon = lon; }
+
+        public Coord(double lat, double lon) {
+            this.lat = lat;
+            this.lon = lon;
+        }
     }
 
     // Método de geocoding
@@ -30,8 +34,8 @@ public class GeocodeService {
                 "&text=" + URLEncoder.encode(address, "UTF-8") + "&size=1";
 
         try (CloseableHttpClient client = HttpClients.createDefault()) {
-            String json = client.execute(new HttpGet(url), httpResponse ->
-                    EntityUtils.toString(httpResponse.getEntity()));
+            String json = client.execute(new HttpGet(url),
+                    httpResponse -> EntityUtils.toString(httpResponse.getEntity()));
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(json);

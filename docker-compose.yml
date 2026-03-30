@@ -24,7 +24,7 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${DBUSER}
       SPRING_DATASOURCE_PASSWORD: ${DBPASS}
-      ORS_API_KEY: ${ORS_API_KEY}
+      APP_ORS_API_KEY: ${ORS_API_KEY}
     depends_on:
       - db
 
@@ -37,7 +37,7 @@ services:
       - "443:443"
     volumes:
       - ./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      # - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - backend
 

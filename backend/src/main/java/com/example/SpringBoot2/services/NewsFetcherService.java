@@ -54,26 +54,21 @@ public class NewsFetcherService {
             return; // não roda durante os testes
         }
         System.out.println("Buscando últimas notícias do feed RSS...");
-        // RestTemplate can be created once outside the loop
         RestTemplate restTemplate = new RestTemplate();
 
         for (String feedUrl : this.RSS_URL) {
             try {
                 System.out.println("Processing feed: " + feedUrl);
-                String xmlPayload; // Declare the variable here
+                String xmlPayload;
 
-                // FIRST, check if it's a URL or a local file
                 if (feedUrl.startsWith("http")) {
-                    // If it's a URL, fetch from the web using RestTemplate
                     System.out.println("Fetching news from URL: " + feedUrl);
                     xmlPayload = restTemplate.getForObject(feedUrl, String.class);
                 } else {
-                    // Otherwise, treat it as a local file path
                     System.out.println("Reading news from local file: " + feedUrl);
                     xmlPayload = Files.readString(Paths.get(feedUrl));
                 }
 
-                // Now, the rest of your logic can proceed with the xmlPayload
                 List<Article> parsedArticles = feedParser.parse(xmlPayload);
                 System.out.println("Parsed " + parsedArticles.size() + " articles from this feed.");
 
@@ -133,20 +128,16 @@ public class NewsFetcherService {
         for (String feedUrl : this.RSS_URL) {
             try {
                 System.out.println("Processing feed: " + feedUrl);
-                String xmlPayload; // Declare the variable here
+                String xmlPayload;
 
-                // FIRST, check if it's a URL or a local file
                 if (feedUrl.startsWith("http")) {
-                    // If it's a URL, fetch from the web using RestTemplate
                     System.out.println("Fetching news from URL: " + feedUrl);
                     xmlPayload = restTemplate.getForObject(feedUrl, String.class);
                 } else {
-                    // Otherwise, treat it as a local file path
                     System.out.println("Reading news from local file: " + feedUrl);
                     xmlPayload = Files.readString(Paths.get(feedUrl));
                 }
 
-                // Now, the rest of your logic can proceed with the xmlPayload
                 List<Article> parsedArticles = feedParser.parse(xmlPayload);
                 System.out.println("Parsed " + parsedArticles.size() + " articles from this feed.");
 
