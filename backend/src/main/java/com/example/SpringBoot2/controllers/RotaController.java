@@ -23,7 +23,7 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class RotaController {
 
-    @Value("${ORS_API_KEY}")
+    @Value("${APP_ORS_API_KEY}")
     private String apiKey;
 
     // Recebe endereços do frontend
@@ -36,7 +36,11 @@ public class RotaController {
     public static class Coord {
         public double lat;
         public double lon;
-        public Coord(double lat, double lon) { this.lat = lat; this.lon = lon; }
+
+        public Coord(double lat, double lon) {
+            this.lat = lat;
+            this.lon = lon;
+        }
     }
 
     private final GeocodeService geocodeService;
@@ -47,16 +51,14 @@ public class RotaController {
         this.empresaRepository = empresaRepository;
     }
 
-    private Map<String,Object> calcularRota(GeocodeService.Coord start, GeocodeService.Coord end) throws IOException {
+    private Map<String, Object> calcularRota(GeocodeService.Coord start, GeocodeService.Coord end) throws IOException {
         String url = String.format(Locale.US,
-            "https://api.openrouteservice.org/v2/directions/driving-car?api_key=%s&start=%f,%f&end=%f,%f",
-            apiKey, start.lon, start.lat, end.lon, end.lat
-        );
+                "https://api.openrouteservice.org/v2/directions/driving-car?api_key=%s&start=%f,%f&end=%f,%f",
+                apiKey, start.lon, start.lat, end.lon, end.lat);
         System.out.println("URL gerada para ORS: " + url);
         try (CloseableHttpClient client = HttpClients.createDefault()) {
-            String json = client.execute(new HttpGet(url), httpResponse ->
-                EntityUtils.toString(httpResponse.getEntity())
-            );
+            String json = client.execute(new HttpGet(url),
+                    httpResponse -> EntityUtils.toString(httpResponse.getEntity()));
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(json);
@@ -80,7 +82,7 @@ public class RotaController {
                 }
             }
 
-            Map<String,Object> result = new HashMap<>();
+            Map<String, Object> result = new HashMap<>();
             result.put("distanceKm", distanceKm);
             result.put("durationMin", durationMin);
             result.put("coordinates", coordinates);
@@ -90,7 +92,7 @@ public class RotaController {
     }
 
     @PostMapping("/rota-empresas")
-    public ResponseEntity<Map<String,Object>> getRotaEmpresas(@RequestBody Map<String,Object> request) {
+    public ResponseEntity<Map<String, Object>> getRotaEmpresas(@RequestBody Map<String, Object> request) {
         try {
             String startAddress = (String) request.get("startAddress");
             int numEmpresas = (int) request.get("numEmpresas");
@@ -133,20 +135,19 @@ public class RotaController {
             }
 
             // Para cada empresa selecionada, chama ORS e monta rota
-            List<Map<String,Object>> rotas = new ArrayList<>();
+            List<Map<String, Object>> rotas = new ArrayList<>();
             for (EmpresaDist ed : empresasParaAPI) {
                 GeocodeService.Coord endCoord = new GeocodeService.Coord(
-                    Double.parseDouble(ed.empresa.getCoordenadas().split(",")[1]),
-                    Double.parseDouble(ed.empresa.getCoordenadas().split(",")[0])
-                );
+                        Double.parseDouble(ed.empresa.getCoordenadas().split(",")[1]),
+                        Double.parseDouble(ed.empresa.getCoordenadas().split(",")[0]));
 
                 // PRINT para debug: coordenadas usadas para o cálculo da rota
                 System.out.println("Tentando rota para empresa: " + ed.empresa.getNome() +
-                                " | End Coord: " + endCoord.lat + "," + endCoord.lon +
-                                " | Distância calculada: " + ed.dist + " km");
+                        " | End Coord: " + endCoord.lat + "," + endCoord.lon +
+                        " | Distância calculada: " + ed.dist + " km");
 
                 try {
-                    Map<String,Object> rota = calcularRota(startCoord, endCoord); // método que já faz fetch para ORS
+                    Map<String, Object> rota = calcularRota(startCoord, endCoord); // método que já faz fetch para ORS
                     rota.put("empresa", ed.empresa.getNome());
                     rotas.add(rota);
                 } catch (IOException e) {
@@ -154,11 +155,10 @@ public class RotaController {
                 }
             }
 
-            Map<String,Object> resposta = new LinkedHashMap<>();
+            Map<String, Object> resposta = new LinkedHashMap<>();
             resposta.put("startCoord", Map.of(
-                "lat", startCoord.lat,
-                "lon", startCoord.lon
-            ));
+                    "lat", startCoord.lat,
+                    "lon", startCoord.lon));
             resposta.put("rotas", rotas);
 
             return ResponseEntity.ok(resposta);
@@ -173,7 +173,11 @@ public class RotaController {
     private static class EmpresaDist {
         EmpresaModel empresa;
         double dist;
-        EmpresaDist(EmpresaModel empresa, double dist) { this.empresa = empresa; this.dist = dist; }
+
+        EmpresaDist(EmpresaModel empresa, double dist) {
+            this.empresa = empresa;
+            this.dist = dist;
+        }
     }
 
     // Fórmula Haversine
@@ -181,10 +185,10 @@ public class RotaController {
         final int R = 6371; // km
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c; // retorna distância em km
     }
 
