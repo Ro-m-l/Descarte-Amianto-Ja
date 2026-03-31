@@ -74,8 +74,8 @@ jobs:
             # Limpa containers e imagens antigas, preservando volumes
             docker system prune -f 
             # Para containers antigos do compose, sem remover volumes
-            docker-compose down --remove-orphans
+            docker compose down --remove-orphans
             # Rebuild e start
-            docker-compose build --no-cache
-            sudo docker compose --env-file .env up -d
+            docker compose build --no-cache
+            docker compose --env-file .env up -d
 
