@@ -34,8 +34,8 @@ jobs:
       - name: Criar .env
         run: |
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DBUSER=${{ secrets.DB_USER }}" >> .env
-          echo "DBPASS=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DBUSER=${{ secrets.DBUSER }}" >> .env
+          echo "DBPASS=${{ secrets.DBPASS }}" >> .env
           echo "SPRING_DATASOURCE_URL=${{ secrets.DB_URL }}" >> .env
           echo "APP_ORS_API_KEY=${{ secrets.ORS_API_KEY }}" >> .env
           
